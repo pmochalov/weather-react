@@ -1,0 +1,43 @@
+.card {
+    background-color: #fff;
+    border-radius: 4px;
+    // border: #eee 1px solid;
+    font-size: 12px;
+    padding: 8px;
+    box-sizing: border-box;
+
+    &__date {
+        height: 24px;
+        display: flex;
+        align-items: center;
+        color:#777;
+    }
+
+    &__icon {
+        height: 64px;
+        // background-color: #f00;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 56px;
+    }    
+
+    &__temp {
+        height: 32px;
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        font-weight: $font-weight-bold;
+    }
+
+    &__item {
+        height: 24px;
+        display: flex;
+        align-items: center;     
+        color:$font-color;
+    }    
+
+}
+
+
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в Архангельске</title>
+    <link rel="stylesheet" href="./css/style.min.css">
+</head>
+<body>
+        <header>
+            Погода в Архангельске
+        </header>
+    
+        <div class="date date-bold" id="mainDate">
+            18 августа, среда
+        </div>
+    
+        <div class="intro">
+            <div id="mainTemp">
+                &plus;13&deg;C
+            </div>
+            <div>
+                <div class="weatherImg" id="mainWeatherImg"></div>
+                <div class="weatherDesc" id="mainWeatherDesc"></div>
+            </div>
+            <div>
+                <div class="weatherData">
+                    <div class="weatherData__pressure" id="mainWeatherPressure"></div>
+                    <div class="weatherData__wind" id="mainWeatherWind"></div>
+                    <div class="weatherData__hydro" id="mainWeatherHydro"></div>
+                    <div class="weatherData__sun">
+                        <span id="mainWeatherSunrise"></span>
+                        <span id="mainWeatherSunset"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <ul class="tabs__menu">
+                <li class="active">Краткий прогноз</li>
+                <li>Подробный</li>
+            </ul>
+            <div class="tabs__content">
+                <div class="tabs__block" id="shortForecast"> <!-- Краткий прогноз -->                                                                                                        
+                </div>
+                <div class="tabs__block" id="detailedForecast"> <!-- Подробный прогноз -->               
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <span>
+                Сделал <a href="https://mchlv.ru/">Павел Мочалов</a>
+            </span>
+        </footer>
+<script src="js/app.js"></script>
+</body>
+</html>

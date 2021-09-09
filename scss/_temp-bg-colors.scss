@@ -1,0 +1,40 @@
+// Фоновые цвета карточек в зависимости от температуры
+
+$min: 0;
+$max: 50;
+
+@function getStep($min, $max) {
+    @return 1 / ($max - $min)
+}
+
+@for $i from $min through $max {
+
+    @if $i != 0 {
+        
+        $colorMin: rgba(155, 219, 255, 0 + getStep($min, $max) * $i);
+        $colorMax: rgba(255, 194, 194, 0 + getStep($min, $max) * $i);
+
+        .tbgcolor-min-#{$i} {
+            background-color: $colorMin;
+        }    
+
+        .tbgcolor-max-#{$i} {
+            background-color: $colorMax;
+        }            
+
+    }
+
+    @if $i == 0 {
+
+        .tbgcolor-0 {
+            background-color: #fff;
+        }    
+
+        .card.tbgcolor-0 {
+            border: #eee 1px solid
+        }
+
+    }    
+
+}
+
