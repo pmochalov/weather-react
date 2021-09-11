@@ -4,7 +4,7 @@ const CITY = "Архангельск";
 const tabsMenu = document.querySelectorAll('.tabs__menu > li');
 const tabsContent = document.querySelector('#tabsContent > .tabs__block');
 
-let forecastId = 2;
+let forecastId = 1;
 
 // Загрузка прогноза по-умолчанию
 window.onload = function () {
@@ -75,7 +75,7 @@ function getIntroForecast() {
         })
         .then(function (data) {
             mainDate.innerHTML = getDateTxt(new Date().getTime() / 1000);
-            mainTemp.innerHTML = getTempTxt(data.main.temp);
+            mainTemp.innerHTML = getTempTxt(data.main.temp) + '&deg;C';
             mainWeatherImg.innerHTML = `<figure class="icon-${data.weather[0].icon}"></figure></div>`;
             mainWeatherDesc.innerHTML = data.weather[0].description;
             mainWeatherPressure.innerHTML = `${Math.round(data.main.pressure * 0.75)} мм.рт.ст`;

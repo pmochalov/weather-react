@@ -23,15 +23,6 @@ body {
     font-size: $font-size-base;
 }
 
-// .wrapper {
-//     width: 100%;
-//     box-sizing: border-box;
-//     padding-top: 8px;
-//     padding-right: 8px;
-//     padding-bottom: 8px;
-//     padding-left: 8px;
-// }
-
 header {
     @include wrapper;  
     height: 56px;
@@ -41,6 +32,18 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @include w-from($screen-md) {
+        height: 88px;
+        margin-top: 16px;
+        font-size: 48px;        
+    }
+
+    @include w-from($screen-lg) {
+        height: 160px;
+        margin-top: 16px;
+        font-size: 80px;        
+    }    
 }
 
 .date {
@@ -55,6 +58,16 @@ header {
     &-bold {
         font-weight: $font-weight-bold;
     }
+
+    @include w-from($screen-md) {
+        height: 56px;
+        font-size: 24px;
+    }
+
+    @include w-from($screen-lg) {
+        height: 96px;
+        font-size: 32px;
+    }    
 }
 
 a {

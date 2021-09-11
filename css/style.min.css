@@ -385,6 +385,14 @@ figure {
   grid-template-columns: 1fr 1fr;
   row-gap: 8px;
   column-gap: 8px; }
+  @media (min-width: 1280px) {
+    .intro {
+      padding-right: 16px;
+      padding-left: 16px; } }
+  @media (min-width: 768px) {
+    .intro {
+      row-gap: 16px;
+      column-gap: 16px; } }
   .intro > div:nth-child(1) {
     grid-area: temp;
     height: 88px;
@@ -396,6 +404,26 @@ figure {
     overflow: hidden;
     font-size: 46px;
     font-weight: 700; }
+    @media (min-width: 768px) {
+      .intro > div:nth-child(1) {
+        font-size: 96px;
+        height: 232px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; } }
+    @media (min-width: 1280px) {
+      .intro > div:nth-child(1) {
+        font-size: 164px;
+        height: 352px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; } }
   .intro > div:nth-child(2) {
     grid-area: icon;
     height: 88px;
@@ -408,6 +436,24 @@ figure {
     display: flex;
     flex-direction: column;
     justify-content: center; }
+    @media (min-width: 768px) {
+      .intro > div:nth-child(2) {
+        height: 232px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; } }
+    @media (min-width: 1280px) {
+      .intro > div:nth-child(2) {
+        height: 352px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; } }
   .intro > div:nth-child(3) {
     grid-area: data;
     height: 80px;
@@ -419,6 +465,24 @@ figure {
     overflow: hidden;
     box-sizing: border-box;
     padding: 8px 8px; }
+    @media (min-width: 768px) {
+      .intro > div:nth-child(3) {
+        height: 160px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; } }
+    @media (min-width: 1280px) {
+      .intro > div:nth-child(3) {
+        height: 208px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; } }
   .intro .weatherImg {
     font-size: 56px;
     width: 100%;
@@ -426,6 +490,14 @@ figure {
     display: flex;
     justify-content: center;
     align-items: center; }
+    @media (min-width: 768px) {
+      .intro .weatherImg {
+        height: 160px;
+        font-size: 160px; } }
+    @media (min-width: 1280px) {
+      .intro .weatherImg {
+        height: 175px;
+        font-size: 220px; } }
   .intro .weatherDesc {
     font-size: 12px;
     box-sizing: border-box;
@@ -434,6 +506,14 @@ figure {
     display: flex;
     justify-content: center;
     align-items: center; }
+    @media (min-width: 768px) {
+      .intro .weatherDesc {
+        font-size: 24px;
+        height: 64px; } }
+    @media (min-width: 1280px) {
+      .intro .weatherDesc {
+        font-size: 32px;
+        height: 88px; } }
   .intro .weatherData {
     display: grid;
     width: 100%;
@@ -441,27 +521,39 @@ figure {
     grid-template-rows: 32px 32px;
     grid-template-areas: "pressure wind hydro" "sun sun sun";
     font-size: 12px; }
+    @media (min-width: 768px) {
+      .intro .weatherData {
+        font-size: 24px;
+        grid-template-rows: 64px 64px; } }
+    @media (min-width: 1280px) {
+      .intro .weatherData {
+        font-size: 32px;
+        grid-template-rows: 88px 88px; } }
+    .intro .weatherData__pressure, .intro .weatherData__wind, .intro .weatherData__hydro, .intro .weatherData__sun {
+      height: 32px; }
+      @media (min-width: 768px) {
+        .intro .weatherData__pressure, .intro .weatherData__wind, .intro .weatherData__hydro, .intro .weatherData__sun {
+          height: 64px; } }
+      @media (min-width: 768px) {
+        .intro .weatherData__pressure, .intro .weatherData__wind, .intro .weatherData__hydro, .intro .weatherData__sun {
+          height: 88px; } }
     .intro .weatherData__pressure {
       grid-area: pressure;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 32px; }
+      align-items: center; }
     .intro .weatherData__wind {
       grid-area: wind;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 32px; }
+      align-items: center; }
     .intro .weatherData__hydro {
       grid-area: hydro;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 32px; }
+      align-items: center; }
     .intro .weatherData__sun {
       grid-area: sun;
-      height: 32px;
       display: grid;
       grid-template-columns: 1fr 1fr; }
       .intro .weatherData__sun span {
@@ -471,6 +563,9 @@ figure {
 
 .tabs {
   margin-top: 8px; }
+  @media (min-width: 1280px) {
+    .tabs {
+      margin-top: 16px; } }
 
 .tabs__menu {
   height: 32px;
@@ -480,6 +575,14 @@ figure {
   margin: 0;
   list-style: none;
   font-size: 12px; }
+  @media (min-width: 768px) {
+    .tabs__menu {
+      height: 64px;
+      font-size: 24px; } }
+  @media (min-width: 1280px) {
+    .tabs__menu {
+      height: 88px;
+      font-size: 32px; } }
   .tabs__menu li {
     height: 32px;
     flex-grow: 1;
@@ -487,6 +590,12 @@ figure {
     justify-content: center;
     align-items: center;
     color: #777; }
+    @media (min-width: 768px) {
+      .tabs__menu li {
+        height: 64px; } }
+    @media (min-width: 1280px) {
+      .tabs__menu li {
+        height: 88px; } }
   .tabs__menu li:hover {
     cursor: pointer;
     color: #000; }
@@ -508,11 +617,29 @@ figure {
   padding-top: 8px;
   padding-bottom: 8px;
   background-color: #fff; }
+  @media (min-width: 1280px) {
+    .tabs__content {
+      padding-right: 16px;
+      padding-left: 16px; } }
+  @media (min-width: 768px) {
+    .tabs__content {
+      padding-top: 16px;
+      padding-bottom: 16px; } }
+
+.tabs__block {
+  /**/ }
 
 .tabs__cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 8px; }
+  @media (min-width: 640px) {
+    .tabs__cards {
+      grid-template-columns: 1fr 1fr 1fr 1fr; } }
+  @media (min-width: 768px) {
+    .tabs__cards {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-gap: 16px; } }
 
 .card {
   background-color: #fff;
@@ -520,28 +647,60 @@ figure {
   font-size: 12px;
   padding: 8px;
   box-sizing: border-box; }
+  @media (min-width: 768px) {
+    .card {
+      font-size: 16px; } }
+  @media (min-width: 1280px) {
+    .card {
+      font-size: 20px;
+      padding: 16px; } }
   .card__date {
     height: 24px;
     display: flex;
     align-items: center;
     color: #777; }
+    @media (min-width: 768px) {
+      .card__date {
+        height: 32px; } }
   .card__icon {
     height: 64px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     font-size: 56px; }
+    @media (min-width: 768px) {
+      .card__icon {
+        height: 80px;
+        font-size: 72px; } }
+    @media (min-width: 1280px) {
+      .card__icon {
+        height: 96px;
+        font-size: 88px; } }
   .card__temp {
     height: 32px;
     display: flex;
     align-items: center;
     font-size: 24px;
     font-weight: 700; }
+    @media (min-width: 768px) {
+      .card__temp {
+        height: 48px;
+        font-size: 32px; } }
+    @media (min-width: 1280px) {
+      .card__temp {
+        height: 64px;
+        font-size: 48px; } }
   .card__item {
     height: 24px;
     display: flex;
     align-items: center;
     color: #000; }
+    @media (min-width: 768px) {
+      .card__item {
+        height: 32px; } }
+  @media (min-width: 1280px) {
+    .card__item:not(:first-child) {
+      margin-top: 8px; } }
 
 footer {
   margin-top: 16px;
@@ -549,6 +708,14 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center; }
+  @media (min-width: 768px) {
+    footer {
+      height: 48px;
+      font-size: 16px; } }
+  @media (min-width: 1280px) {
+    footer {
+      height: 64px;
+      font-size: 16px; } }
   footer a {
     color: #000;
     border-bottom: #000 1px solid; }
@@ -884,6 +1051,20 @@ header {
   display: flex;
   justify-content: center;
   align-items: center; }
+  @media (min-width: 1280px) {
+    header {
+      padding-right: 16px;
+      padding-left: 16px; } }
+  @media (min-width: 768px) {
+    header {
+      height: 88px;
+      margin-top: 16px;
+      font-size: 48px; } }
+  @media (min-width: 1280px) {
+    header {
+      height: 160px;
+      margin-top: 16px;
+      font-size: 80px; } }
 
 .date {
   width: 100%;
@@ -898,8 +1079,20 @@ header {
   align-items: center;
   font-weight: 400;
   font-size: 12px; }
+  @media (min-width: 1280px) {
+    .date {
+      padding-right: 16px;
+      padding-left: 16px; } }
   .date-bold {
     font-weight: 700; }
+  @media (min-width: 768px) {
+    .date {
+      height: 56px;
+      font-size: 24px; } }
+  @media (min-width: 1280px) {
+    .date {
+      height: 96px;
+      font-size: 32px; } }
 
 a {
   text-decoration: none; }
