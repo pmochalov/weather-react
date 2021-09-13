@@ -42,9 +42,6 @@ for (let i = 0; i < tabsMenu.length; i++) {
 }
 
 
-
-
-
 // Загрузить прогноз погоды
 function getForecast() {
 
@@ -89,6 +86,7 @@ function getIntroForecast() {
 
 // Краткий прогноз
 function getShortForecast() {
+
     const shortForecastUrl = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
 
     fetch(shortForecastUrl)
@@ -130,6 +128,7 @@ function getShortForecast() {
 
 // Подробный прогноз
 function getDetailedForecast() {
+
     const detailedForecastUrl = `http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
 
     fetch(detailedForecastUrl)
@@ -192,7 +191,9 @@ function getDetailedForecast() {
 
 
 // Возвращает класс фона для температуры
-function getCardBg(temperature) {
+function getCardBg(value) {
+
+    let temperature = Math.floor(value);
 
     if (temperature < 0) {
         return `tbgcolor-min${Math.round(temperature)}`
@@ -221,9 +222,9 @@ function getTempTxt(value) {
 
     let temp = Math.round(value);
 
-    if (value < 0) {
-        return `&minus;${Math.abs(temp)}`
-    } else if (value > 0) {
+    if (temp < 0) {
+        return `&minus;${temp}`
+    } else if (temp > 0) {
         return `&plus;${temp}`
     } else {
         return `${temp}`

@@ -724,7 +724,7 @@ footer {
   background-color: #fff; }
 
 .card.tbgcolor-0 {
-  border: #f6f6f6 1px solid; }
+  border: #eee 1px dotted; }
 
 .tbgcolor-min-1 {
   background-color: rgba(155, 219, 255, 0.02); }
@@ -1097,4 +1097,4 @@ header {
 a {
   text-decoration: none; }
 
-/*# sourceMappingURL=style.min.css.map */
+/*# sourceMappingURL=style.css.map */
