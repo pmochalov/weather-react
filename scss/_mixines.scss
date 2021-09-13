@@ -1,3 +1,9 @@
+@mixin w-from($screen) {
+    @media (min-width: $screen) {
+        @content;
+    }
+}
+
 @mixin wrapper {
     width: 100%;
     box-sizing: border-box;
@@ -9,12 +15,6 @@
     @include w-from($screen-lg) {
         padding-right: 16px;
         padding-left: 16px;        
-    }
-}
-
-@mixin w-from($screen) {
-    @media (min-width: $screen) {
-        @content;
     }
 }
 

@@ -73,3 +73,8 @@ header {
 a {
     text-decoration: none;
 }
+
+a:hover {
+    color: lighten($font-color, 50%);
+    border-bottom: lighten($font-color,80%) 1px solid;
+}

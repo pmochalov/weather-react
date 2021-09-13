@@ -6,7 +6,7 @@ const tabsContent = document.querySelector('#tabsContent > .tabs__block');
 
 let forecastId = 1;
 
-// Загрузка прогноза по-умолчанию
+// Forecast onload
 window.onload = function () {
 
     getIntroForecast();
@@ -16,7 +16,7 @@ window.onload = function () {
 };
 
 
-// Вкладки
+// Tabs
 for (let i = 0; i < tabsMenu.length; i++) {
 
     if (forecastId == i + 1) {
@@ -42,7 +42,7 @@ for (let i = 0; i < tabsMenu.length; i++) {
 }
 
 
-// Загрузить прогноз погоды
+// Get forecast
 function getForecast() {
 
     tabsContent.innerHTML = '';
@@ -61,10 +61,10 @@ function getForecast() {
 }
 
 
-// Интро-прогноз
+// Get forecast, main block
 function getIntroForecast() {
 
-    const mainUrl = `http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ru&q=${CITY}&apikey=${KEY}`;
+    const mainUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&lang=ru&q=${CITY}&apikey=${KEY}`;
 
     fetch(mainUrl)
         .then(function (response) {
@@ -84,10 +84,10 @@ function getIntroForecast() {
 }
 
 
-// Краткий прогноз
+// Get forecast, short
 function getShortForecast() {
 
-    const shortForecastUrl = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
+    const shortForecastUrl = `https://api.openweathermap.org/data/2.5/forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
 
     fetch(shortForecastUrl)
 
@@ -112,7 +112,7 @@ function getShortForecast() {
                 card.classList.add('card');
                 card.classList.add(getCardBg(item.temp.max));
 
-                card.innerHTML = `<div class="card__date">${getDateTxt(item.dt)}</div>`;
+                card.innerHTML = `<div class="card__date">${getDateTxt(item.dt, showTodayTxt = true)}</div>`;
                 card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
                 card.innerHTML += `<div class="card__temp">${getTempTxt(item.temp.day)}</div>`;
                 card.innerHTML += `<div class="card__item">${getTempTxt(item.temp.night)}</div>`;
@@ -126,10 +126,10 @@ function getShortForecast() {
 }
 
 
-// Подробный прогноз
+// Get forecast, detailed
 function getDetailedForecast() {
 
-    const detailedForecastUrl = `http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
+    const detailedForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
 
     fetch(detailedForecastUrl)
         .then(function (response) {
@@ -160,7 +160,7 @@ function getDetailedForecast() {
                 // Дата
                 let dateBlock = document.createElement('div');
                 dateBlock.classList.add('date');
-                dateBlock.innerHTML = getDateTxt(key);
+                dateBlock.innerHTML = getDateTxt(key, showTodayTxt = true);
                 tabsContent.append(dateBlock);
 
                 // Карточки
@@ -190,7 +190,7 @@ function getDetailedForecast() {
 }
 
 
-// Возвращает класс фона для температуры
+// Returns the css class for background .card-block, from temperature value
 function getCardBg(value) {
 
     let temperature = Math.floor(value);
@@ -206,7 +206,7 @@ function getCardBg(value) {
 }
 
 
-// Возвращает час 
+// Returns the formetted time
 function getTime(value) {
     let datetime = new Date(value * 1000);
 
@@ -217,7 +217,7 @@ function getTime(value) {
 }
 
 
-// Возвращает текстовое представление температуры для отображения в карточке
+// Returns txt-variant of temperature value(with "+" or "-")
 function getTempTxt(value) {
 
     let temp = Math.round(value);
@@ -233,8 +233,8 @@ function getTempTxt(value) {
 }
 
 
-// Возвращает текстовое представление даты
-function getDateTxt(value) {
+// Returns txt-variant of date
+function getDateTxt(value, showTodayTxt = false) {
 
     let d = new Date(value * 1000);
 
@@ -255,11 +255,18 @@ function getDateTxt(value) {
 
     const WDAYS = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
 
-    return `${d.getDate()} ${MONTHS[d.getMonth()]}, ${WDAYS[d.getDay()]}`;
+    let now = new Date();
+
+    if (now.getDate() == d.getDate() && showTodayTxt == true) {
+        return `Сегодня`;
+    } else {
+        return `${d.getDate()} ${MONTHS[d.getMonth()]}, ${WDAYS[d.getDay()]}`;
+    }
+
 }
 
 
-// Возвращает строку с названием ветра
+// Returns title of the wind from direction-value
 function getWindName(deg) {
 
     if (deg >= 0 && deg < 22.5) { return "С" }

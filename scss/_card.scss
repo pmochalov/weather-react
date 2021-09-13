@@ -1,5 +1,5 @@
 .card {
-    background-color: #fff;
+    background-color: $card-bg-color;
     border-radius: 4px;
     font-size: 12px;
     padding: 8px;
@@ -18,7 +18,7 @@
         height: 24px;
         display: flex;
         align-items: center;
-        color:#777;
+        color: #777;
 
         @include w-from($screen-md) {
             height: 32px;
@@ -27,7 +27,6 @@
 
     &__icon {
         height: 64px;
-        // background-color: #f00;
         display: flex;
         justify-content: flex-start;
         align-items: center;
