@@ -1,5 +1,6 @@
 const KEY = "d9e9e82523b9a0f692dcf8d361dc97c4";
 const CITY = "Архангельск";
+const URL = "https://api.openweathermap.org/data/2.5/";
 
 const tabsMenu = document.querySelectorAll('.tabs__menu > li');
 const tabsContent = document.querySelector('#tabsContent > .tabs__block');
@@ -64,7 +65,7 @@ function getForecast() {
 // Get forecast, main block
 function getIntroForecast() {
 
-    const mainUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&lang=ru&q=${CITY}&apikey=${KEY}`;
+    const mainUrl = `${URL}weather?units=metric&lang=ru&q=${CITY}&apikey=${KEY}`;
 
     fetch(mainUrl)
         .then(function (response) {
@@ -87,7 +88,7 @@ function getIntroForecast() {
 // Get forecast, short
 function getShortForecast() {
 
-    const shortForecastUrl = `https://api.openweathermap.org/data/2.5/forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
+    const shortForecastUrl = `${URL}forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
 
     fetch(shortForecastUrl)
 
@@ -129,7 +130,7 @@ function getShortForecast() {
 // Get forecast, detailed
 function getDetailedForecast() {
 
-    const detailedForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
+    const detailedForecastUrl = `${URL}forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
 
     fetch(detailedForecastUrl)
         .then(function (response) {
@@ -223,7 +224,7 @@ function getTempTxt(value) {
     let temp = Math.round(value);
 
     if (temp < 0) {
-        return `&minus;${temp}`
+        return `&minus;${Math.abs(temp)}`
     } else if (temp > 0) {
         return `&plus;${temp}`
     } else {
