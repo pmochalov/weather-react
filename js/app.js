@@ -11,7 +11,6 @@ let forecastId = 1;
 window.onload = function () {
 
     getIntroForecast();
-
     getForecast();
 
 };
@@ -46,8 +45,6 @@ for (let i = 0; i < tabsMenu.length; i++) {
 // Get forecast
 function getForecast() {
 
-    tabsContent.innerHTML = '';
-
     switch (forecastId) {
         case '1':
             getShortForecast();
@@ -63,131 +60,119 @@ function getForecast() {
 
 
 // Get forecast, main block
-function getIntroForecast() {
+async function getIntroForecast() {
 
     const mainUrl = `${URL}weather?units=metric&lang=ru&q=${CITY}&apikey=${KEY}`;
 
-    fetch(mainUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            mainDate.innerHTML = getDateTxt(new Date().getTime() / 1000);
-            mainTemp.innerHTML = getTempTxt(data.main.temp) + '&deg;C';
-            mainWeatherImg.innerHTML = `<figure class="icon-${data.weather[0].icon}"></figure></div>`;
-            mainWeatherDesc.innerHTML = data.weather[0].description;
-            mainWeatherPressure.innerHTML = `${Math.round(data.main.pressure * 0.75)} мм.рт.ст`;
-            mainWeatherWind.innerHTML = `${getWindName(data.wind.deg)}, ${Math.round(data.wind.speed)} м/с`;
-            mainWeatherHydro.innerHTML = `${data.main.humidity} %`;
-            mainWeatherSunrise.innerHTML = 'Восход: ' + getTime(data.sys.sunrise);
-            mainWeatherSunset.innerHTML = 'Закат: ' + getTime(data.sys.sunset);
-        });
+    let response = await fetch(mainUrl);
+    let data = await response.json();
+
+    mainDate.innerHTML = getDateTxt(new Date().getTime() / 1000);
+    mainTemp.innerHTML = getTempTxt(data.main.temp) + '&deg;C';
+    mainWeatherImg.innerHTML = `<figure class="icon-${data.weather[0].icon}"></figure></div>`;
+    mainWeatherDesc.innerHTML = data.weather[0].description;
+    mainWeatherPressure.innerHTML = `${Math.round(data.main.pressure * 0.75)} мм.рт.ст`;
+    mainWeatherWind.innerHTML = `${getWindName(data.wind.deg)}, ${Math.round(data.wind.speed)} м/с`;
+    mainWeatherHydro.innerHTML = `${data.main.humidity} %`;
+    mainWeatherSunrise.innerHTML = 'Восход: ' + getTime(data.sys.sunrise);
+    mainWeatherSunset.innerHTML = 'Закат: ' + getTime(data.sys.sunset);
 }
 
 
 // Get forecast, short
-function getShortForecast() {
+async function getShortForecast() {
 
     const shortForecastUrl = `${URL}forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
 
-    fetch(shortForecastUrl)
+    let response = await fetch(shortForecastUrl)
+    let data = await response.json();
 
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
+    tabsContent.innerHTML = '';
 
-            let tabsCards = document.createElement('div');
-            tabsCards.classList.add('tabs__cards');
-            tabsContent.append(tabsCards);
+    let tabsCards = document.createElement('div');
+    tabsCards.classList.add('tabs__cards');
+    tabsContent.append(tabsCards);
 
-            // Карточки
-            let tabsBlock = document.createElement('div');
-            tabsBlock.classList.add('tabs__cards');
-            tabsContent.append(tabsBlock);
+    // Карточки
+    let tabsBlock = document.createElement('div');
+    tabsBlock.classList.add('tabs__cards');
+    tabsContent.append(tabsBlock);
 
-            for (let i = 0; i < data.list.length; i++) {
+    for (let i = 0; i < data.list.length; i++) {
 
-                let item = data.list[i];
-                let card = document.createElement('div');
-                card.classList.add('card');
-                card.classList.add(getCardBg(item.temp.max));
+        let item = data.list[i];
+        let card = document.createElement('div');
+        card.classList.add('card');
+        card.classList.add(getCardBg(item.temp.max));
 
-                card.innerHTML = `<div class="card__date">${getDateTxt(item.dt, showTodayTxt = true)}</div>`;
-                card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
-                card.innerHTML += `<div class="card__temp">${getTempTxt(item.temp.day)}</div>`;
-                card.innerHTML += `<div class="card__item">${getTempTxt(item.temp.night)}</div>`;
-                card.innerHTML += `<div class="card__item">${item.weather[0].description}</div>`;
-                card.innerHTML += `<div class="card__item">${item.humidity} %</div>`;
-                card.innerHTML += `<div class="card__item">${getWindName(item.deg)}, ${Math.round(item.speed)} м/с</div>`;
+        card.innerHTML = `<div class="card__date">${getDateTxt(item.dt, showTodayTxt = true)}</div>`;
+        card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
+        card.innerHTML += `<div class="card__temp">${getTempTxt(item.temp.day)}</div>`;
+        card.innerHTML += `<div class="card__item">${getTempTxt(item.temp.night)}</div>`;
+        card.innerHTML += `<div class="card__item">${item.weather[0].description}</div>`;
+        card.innerHTML += `<div class="card__item">${item.humidity} %</div>`;
+        card.innerHTML += `<div class="card__item">${getWindName(item.deg)}, ${Math.round(item.speed)} м/с</div>`;
 
-                tabsBlock.append(card);
-            }
-        });
+        tabsBlock.append(card);
+    }
 }
 
 
 // Get forecast, detailed
-function getDetailedForecast() {
+async function getDetailedForecast() {
 
     const detailedForecastUrl = `${URL}forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
 
-    fetch(detailedForecastUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
+    let response = await fetch(detailedForecastUrl);
+    let data = await response.json();
+    let formatResponse = {};
 
-            let formatResponse = {};
+    for (let item of data.list) {
 
-            for (let item of data.list) {
+        let itemDate = new Date(item.dt * 1000);
+        let keyDate = +new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate()) / 1000;
 
-                let itemDate = new Date(item.dt * 1000);
-                let keyDate = +new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate()) / 1000;
+        if (formatResponse[keyDate] === undefined) {
+            formatResponse[keyDate] = [];
+        }
 
-                if (formatResponse[keyDate] === undefined) {
-                    formatResponse[keyDate] = [];
-                }
+        formatResponse[keyDate].push(item);
+    }
 
-                formatResponse[keyDate].push(item);
-            }
+    tabsContent.innerHTML = '';
 
-            return formatResponse;
-        })
-        .then(function (data) {
+    for (let key in formatResponse) {
 
-            for (let key in data) {
+        // Дата
+        let dateBlock = document.createElement('div');
+        dateBlock.classList.add('date');
+        dateBlock.innerHTML = getDateTxt(key, showTodayTxt = true);
+        tabsContent.append(dateBlock);
 
-                // Дата
-                let dateBlock = document.createElement('div');
-                dateBlock.classList.add('date');
-                dateBlock.innerHTML = getDateTxt(key, showTodayTxt = true);
-                tabsContent.append(dateBlock);
+        // Карточки
+        let tabsBlock = document.createElement('div');
+        tabsBlock.classList.add('tabs__cards');
+        tabsContent.append(tabsBlock);
 
-                // Карточки
-                let tabsBlock = document.createElement('div');
-                tabsBlock.classList.add('tabs__cards');
-                tabsContent.append(tabsBlock);
+        for (let i = 0; i < formatResponse[key].length; i++) {
+            let item = formatResponse[key][i];
+            let card = document.createElement('div');
+            card.classList.add('card');
+            card.classList.add(getCardBg(item.main.temp_max));
 
-                for (let i = 0; i < data[key].length; i++) {
-                    let item = data[key][i];
-                    let card = document.createElement('div');
-                    card.classList.add('card');
-                    card.classList.add(getCardBg(item.main.temp_max));
+            card.innerHTML = `<div class="card__date">${getTime(item.dt)}</div>`;
+            card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
+            card.innerHTML += `<div class="card__temp">${getTempTxt(item.main.temp_max)}</div>`;
+            card.innerHTML += `<div class="card__item">${getTempTxt(item.main.temp_min)}</div>`;
+            card.innerHTML += `<div class="card__item">${item.weather[0].description}</div>`;
+            card.innerHTML += `<div class="card__item">${item.main.humidity} %</div>`;
+            card.innerHTML += `<div class="card__item">${getWindName(item.wind.deg)}, ${Math.round(item.wind.speed)} м/с</div>`;
 
-                    card.innerHTML = `<div class="card__date">${getTime(item.dt)}</div>`;
-                    card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
-                    card.innerHTML += `<div class="card__temp">${getTempTxt(item.main.temp_max)}</div>`;
-                    card.innerHTML += `<div class="card__item">${getTempTxt(item.main.temp_min)}</div>`;
-                    card.innerHTML += `<div class="card__item">${item.weather[0].description}</div>`;
-                    card.innerHTML += `<div class="card__item">${item.main.humidity} %</div>`;
-                    card.innerHTML += `<div class="card__item">${getWindName(item.wind.deg)}, ${Math.round(item.wind.speed)} м/с</div>`;
+            tabsBlock.append(card);
+        }
 
-                    tabsBlock.append(card);
-                }
+    }
 
-            }
-        });
 }
 
 
