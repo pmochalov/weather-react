@@ -1,277 +1,306 @@
-const KEY = "d9e9e82523b9a0f692dcf8d361dc97c4";
-const CITY = "Архангельск";
-const URL = "https://api.openweathermap.org/data/2.5/";
+class PWeather {
 
-const tabsMenu = document.querySelectorAll('.tabs__menu > li');
-const tabsContent = document.querySelector('#tabsContent > .tabs__block');
+    #url = "https://api.openweathermap.org/data/2.5/";
 
-let forecastId = 1;
+    constructor(options) {
+        this._key = options.key;
+        this._city = options.city;
+        this._forecastId = 2; // short forecast = 1, detailed = 2
 
-// Forecast onload
-window.onload = function () {
+        this.$tabs = document.querySelector('.tabs');
 
-    getIntroForecast();
-    getForecast();
-
-};
-
-
-// Tabs
-for (let i = 0; i < tabsMenu.length; i++) {
-
-    if (forecastId == i + 1) {
-        tabsMenu[i].classList.add('active');
+        this.#render();
     }
 
-    tabsMenu[i].addEventListener('click', function () {
+    async #getForecast(url) {
+        let response = await fetch(url);
 
-        forecastId = tabsMenu[i].dataset.forecastId;
+        let data = await response.json();
+        return data;
+    }
 
-        for (let k = 0; k < tabsMenu.length; k++) {
-            if (i == k) {
-                tabsMenu[k].classList.add('active');
-                getForecast();
+    #createUrl(key = 'intro') {
+        const apiUrls = {
+            intro: `${this.#url}weather?units=metric&lang=ru&q=${this._city}&apikey=${this._key}`,
+            short: `${this.#url}forecast/daily?q=${this._city}&units=metric&lang=ru&cnt=8&appid=${this._key}`,
+            detailed: `${this.#url}forecast?units=metric&lang=ru&q=${this._city}&appid=${this._key}`
+        };
 
-            } else {
-                tabsMenu[k].classList.remove('active');
+        return apiUrls[key];
+    }
+
+    renderIntroForecast(data) {
+        mainDate.innerHTML = getDateTxt(new Date().getTime() / 1000);
+        mainTemp.innerHTML = getTempTxt(data.main.temp) + '&deg;C';
+        mainWeatherImg.innerHTML = `<figure class="icon-${data.weather[0].icon}"></figure></div>`;
+        mainWeatherDesc.innerHTML = data.weather[0].description;
+        mainWeatherPressure.innerHTML = `${Math.round(data.main.pressure * 0.75)} мм.рт.ст`;
+        mainWeatherWind.innerHTML = `${getWindTitle(data.wind.deg)}, ${Math.round(data.wind.speed)} м/с`;
+        mainWeatherHydro.innerHTML = `${data.main.humidity} %`;
+        mainWeatherSunrise.innerHTML = 'Восход: ' + getTimeTxt(data.sys.sunrise);
+        mainWeatherSunset.innerHTML = 'Закат: ' + getTimeTxt(data.sys.sunset);
+    }
+
+    renderShortForecast(data) { // Short forecast
+        tabsContent.innerHTML = '';
+
+        let tabsCards = document.createElement('div');
+        tabsCards.classList.add('tabs__cards');
+        tabsContent.append(tabsCards);
+
+        for (let i = 0; i < data.list.length; i++) {
+            tabsCards.append(this.renderShortCard(data.list[i]));
+        }
+    }
+
+    renderDetailedForecast(data) { // Deteiled forecast
+        let formatResponse = [];
+
+        for (let item of data.list) {
+            let itemDate = new Date(item.dt * 1000);
+            let keyDate = +new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate()) / 1000;
+
+            if (formatResponse[keyDate] === undefined) {
+                formatResponse[keyDate] = [];
+            }
+
+            formatResponse[keyDate].push(item);
+        }
+        tabsContent.innerHTML = '';
+
+        for (let key in formatResponse) {
+            let dateBlock = document.createElement('div'); // Дата
+            dateBlock.classList.add('date');
+            dateBlock.innerHTML = getDateTxt(key, true);
+            tabsContent.append(dateBlock);
+
+            let tabsBlock = document.createElement('div'); // Блок с карточками
+            tabsBlock.classList.add('tabs__cards');
+            tabsContent.append(tabsBlock);
+
+            for (let i = 0; i < formatResponse[key].length; i++) {
+                tabsBlock.append(this.renderDetailedCard(formatResponse[key][i]));
             }
         }
-
-    });
-
-}
-
-
-// Get forecast
-function getForecast() {
-
-    switch (forecastId) {
-        case '1':
-            getShortForecast();
-            break;
-        case '2':
-            getDetailedForecast();
-            break;
-        default:
-            getShortForecast();
     }
 
-}
-
-
-// Get forecast, main block
-async function getIntroForecast() {
-
-    const mainUrl = `${URL}weather?units=metric&lang=ru&q=${CITY}&apikey=${KEY}`;
-
-    let response = await fetch(mainUrl);
-    let data = await response.json();
-
-    mainDate.innerHTML = getDateTxt(new Date().getTime() / 1000);
-    mainTemp.innerHTML = getTempTxt(data.main.temp) + '&deg;C';
-    mainWeatherImg.innerHTML = `<figure class="icon-${data.weather[0].icon}"></figure></div>`;
-    mainWeatherDesc.innerHTML = data.weather[0].description;
-    mainWeatherPressure.innerHTML = `${Math.round(data.main.pressure * 0.75)} мм.рт.ст`;
-    mainWeatherWind.innerHTML = `${getWindName(data.wind.deg)}, ${Math.round(data.wind.speed)} м/с`;
-    mainWeatherHydro.innerHTML = `${data.main.humidity} %`;
-    mainWeatherSunrise.innerHTML = 'Восход: ' + getTime(data.sys.sunrise);
-    mainWeatherSunset.innerHTML = 'Закат: ' + getTime(data.sys.sunset);
-}
-
-
-// Get forecast, short
-async function getShortForecast() {
-
-    const shortForecastUrl = `${URL}forecast/daily?q=${CITY}&units=metric&lang=ru&cnt=8&appid=${KEY}`;
-
-    let response = await fetch(shortForecastUrl)
-    let data = await response.json();
-
-    tabsContent.innerHTML = '';
-
-    let tabsCards = document.createElement('div');
-    tabsCards.classList.add('tabs__cards');
-    tabsContent.append(tabsCards);
-
-    // Карточки
-    let tabsBlock = document.createElement('div');
-    tabsBlock.classList.add('tabs__cards');
-    tabsContent.append(tabsBlock);
-
-    for (let i = 0; i < data.list.length; i++) {
-
-        let item = data.list[i];
+    renderShortCard(data) { // Card of short forecast
         let card = document.createElement('div');
         card.classList.add('card');
-        card.classList.add(getCardBg(item.temp.max));
+        card.classList.add(this.#getCardBg(data.temp.max));
 
-        card.innerHTML = `<div class="card__date">${getDateTxt(item.dt, showTodayTxt = true)}</div>`;
-        card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
-        card.innerHTML += `<div class="card__temp">${getTempTxt(item.temp.day)}</div>`;
-        card.innerHTML += `<div class="card__item">${getTempTxt(item.temp.night)}</div>`;
-        card.innerHTML += `<div class="card__item">${item.weather[0].description}</div>`;
-        card.innerHTML += `<div class="card__item">${item.humidity} %</div>`;
-        card.innerHTML += `<div class="card__item">${getWindName(item.deg)}, ${Math.round(item.speed)} м/с</div>`;
+        card.innerHTML = `<div class="card__date">${getDateTxt(data.dt)}</div>`;
+        card.innerHTML += `<div class="card__icon"><figure class="icon-${data.weather[0].icon}"></figure></div>`;
+        card.innerHTML += `<div class="card__temp">${getTempTxt(data.temp.max)}</div>`;
+        card.innerHTML += `<div class="card__item">${getTempTxt(data.temp.min)}</div>`;
+        card.innerHTML += `<div class="card__item">${data.weather[0].description}</div>`;
+        card.innerHTML += `<div class="card__item">${data.humidity} %</div>`;
+        card.innerHTML += `<div class="card__item">${Math.round(data.pressure * 0.75)} мм.рт.ст</div>`;
+        card.innerHTML += `<div class="card__item">${getWindTitle(data.deg)}, ${Math.round(data.speed)} м/с</div>`;
 
-        tabsBlock.append(card);
+        return card;
     }
-}
 
+    renderDetailedCard(data) { // Card of detailed forecast
+        let card = document.createElement('div');
+        card.classList.add('card');
+        card.classList.add(this.#getCardBg(data.main.temp_max));
 
-// Get forecast, detailed
-async function getDetailedForecast() {
+        card.innerHTML = `<div class="card__date">${getTimeTxt(data.dt)}</div>`;
+        card.innerHTML += `<div class="card__icon"><figure class="icon-${data.weather[0].icon}"></figure></div>`;
+        card.innerHTML += `<div class="card__temp">${getTempTxt(data.main.temp_max)}</div>`;
+        card.innerHTML += `<div class="card__item">${getTempTxt(data.main.temp_min)}</div>`;
+        card.innerHTML += `<div class="card__item">${data.weather[0].description}</div>`;
+        card.innerHTML += `<div class="card__item">${data.main.humidity} %</div>`;
+        card.innerHTML += `<div class="card__item">${Math.round(data.main.pressure * 0.75)} мм.рт.ст</div>`;
+        card.innerHTML += `<div class="card__item">${getWindTitle(data.wind.deg)}, ${Math.round(data.wind.speed)} м/с</div>`;
 
-    const detailedForecastUrl = `${URL}forecast?units=metric&lang=ru&q=${CITY}&appid=${KEY}`;
+        return card;
+    }
 
-    let response = await fetch(detailedForecastUrl);
-    let data = await response.json();
-    let formatResponse = {};
+    #getCardBg(value) {
+        let temperature = Math.floor(value);
 
-    for (let item of data.list) {
-
-        let itemDate = new Date(item.dt * 1000);
-        let keyDate = +new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate()) / 1000;
-
-        if (formatResponse[keyDate] === undefined) {
-            formatResponse[keyDate] = [];
+        if (temperature < 0) {
+            return `tbgcolor-min${Math.round(temperature)}`;
+        } else if (temperature > 0) {
+            return `tbgcolor-max-${Math.round(temperature)}`;
         }
 
-        formatResponse[keyDate].push(item);
+        return `tbgcolor-0`;
     }
 
-    tabsContent.innerHTML = '';
+    setTabsState() { // Set tabs state
+        let tabsMenu = this.$tabs.querySelector('.tabs__menu');
 
-    for (let key in formatResponse) {
-
-        // Дата
-        let dateBlock = document.createElement('div');
-        dateBlock.classList.add('date');
-        dateBlock.innerHTML = getDateTxt(key, showTodayTxt = true);
-        tabsContent.append(dateBlock);
-
-        // Карточки
-        let tabsBlock = document.createElement('div');
-        tabsBlock.classList.add('tabs__cards');
-        tabsContent.append(tabsBlock);
-
-        for (let i = 0; i < formatResponse[key].length; i++) {
-            let item = formatResponse[key][i];
-            let card = document.createElement('div');
-            card.classList.add('card');
-            card.classList.add(getCardBg(item.main.temp_max));
-
-            card.innerHTML = `<div class="card__date">${getTime(item.dt)}</div>`;
-            card.innerHTML += `<div class="card__icon"><figure class="icon-${item.weather[0].icon}"></figure></div>`;
-            card.innerHTML += `<div class="card__temp">${getTempTxt(item.main.temp_max)}</div>`;
-            card.innerHTML += `<div class="card__item">${getTempTxt(item.main.temp_min)}</div>`;
-            card.innerHTML += `<div class="card__item">${item.weather[0].description}</div>`;
-            card.innerHTML += `<div class="card__item">${item.main.humidity} %</div>`;
-            card.innerHTML += `<div class="card__item">${getWindName(item.wind.deg)}, ${Math.round(item.wind.speed)} м/с</div>`;
-
-            tabsBlock.append(card);
+        for (let tab of tabsMenu.children) {
+            if (tab.dataset.forecastId == this._forecastId) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
         }
+    }
 
+    async setTabsContent() {
+        if (this._forecastId == 1) {
+            let data = await this.#getForecast(this.#createUrl('short'));
+            this.renderShortForecast(data);
+        } else if (this._forecastId == 2) {
+            let data = await this.#getForecast(this.#createUrl('detailed'));
+            this.renderDetailedForecast(data);
+        }
+    }
+
+    async #render() { // Render of the page
+        this.setTabsState();
+        this.setTabsContent();
+
+        this.clickTabs = this.clickTabs.bind(this);
+        this.$tabs.addEventListener('click', this.clickTabs)
+
+        this.renderIntroForecast(await this.#getForecast(this.#createUrl('intro')));
+    }
+
+    clickTabs(event) {
+        if (event.target.hasAttribute('data-forecast-id')) {
+            this._forecastId = +event.target.dataset.forecastId;
+            this.setTabsState();
+            this.setTabsContent();
+        }
     }
 
 }
 
+let w = new PWeather({
+    city: "Архангельск",
+    key: "d9e9e82523b9a0f692dcf8d361dc97c4"
+});
 
-// Returns the css class for background .card-block, from temperature value
-function getCardBg(value) {
 
-    let temperature = Math.floor(value);
-
-    if (temperature < 0) {
-        return `tbgcolor-min${Math.round(temperature)}`
-    } else if (temperature > 0) {
-        return `tbgcolor-max-${Math.round(temperature)}`
-    } else {
-        return `tbgcolor-0`
+const windsArr = [
+    {
+        start: 0,
+        end: 22.5,
+        value: "C"
+    },
+    {
+        start: 22.5,
+        end: 45,
+        value: "ССВ"
+    },
+    {
+        start: 45,
+        end: 67.5,
+        value: "СВ"
+    },
+    {
+        start: 67.5,
+        end: 90,
+        value: "ВСВ"
+    },
+    {
+        start: 90,
+        end: 112.5,
+        value: "В"
+    },
+    {
+        start: 112.5,
+        end: 135,
+        value: "ВЮВ"
+    },
+    {
+        start: 135,
+        end: 157.5,
+        value: "ЮВ"
+    },
+    {
+        start: 157.5,
+        end: 180,
+        value: "ЮЮВ"
+    },
+    {
+        start: 180,
+        end: 202.5,
+        value: "Ю"
+    },
+    {
+        start: 202.5,
+        end: 225,
+        value: "ЮЮЗ"
+    },
+    {
+        start: 225,
+        end: 247.5,
+        value: "ЮЗ"
+    },
+    {
+        start: 247.5,
+        end: 270,
+        value: "ЗЮЗ"
+    },
+    {
+        start: 270,
+        end: 292.5,
+        value: "З"
+    },
+    {
+        start: 292.5,
+        end: 315,
+        value: "ЗСЗ"
+    },
+    {
+        start: 315,
+        end: 337.5,
+        value: "СЗ"
+    },
+    {
+        start: 337.5,
+        end: 360,
+        value: "ССЗ"
     }
+];
 
+const getWindTitle = (deg) => { // Returns converted the wind angle to the wind title
+    let wind = windsArr.find((el) => {
+        if (el.end == 360) {
+            return (deg >= el.start && deg <= el.end);
+        }
+        return (deg >= el.start && deg < el.end);
+    })
+
+    return wind.value;
 }
 
+const getDateTxt = (value, showTodayTxt = false) => { // Returns the name of the date
+    let date = new Date(value * 1000);
+    const MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня",
+        "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+    const DAYS = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
+    let now = new Date();
 
-// Returns the formetted time
-function getTime(value) {
+    if (now.getDate() == date.getDate() && showTodayTxt == true) {
+        return `Сегодня`;
+    }
+
+    return `${date.getDate()} ${MONTHS[date.getMonth()]}, ${DAYS[date.getDay()]}`;
+}
+
+const getTimeTxt = (value) => { // Returns the time in format: ##:##
     let datetime = new Date(value * 1000);
-
     let hours = datetime.getHours();
     let minutes = (datetime.getMinutes() < 10) ? `0${datetime.getMinutes()}` : datetime.getMinutes();
 
     return `${hours}:${minutes}`;
 }
 
-
-// Returns txt-variant of temperature value(with "+" or "-")
-function getTempTxt(value) {
-
+const getTempTxt = (value) => { // Returns formatted temperature value (+/- or nothing, if value == 0)
     let temp = Math.round(value);
 
     if (temp < 0) {
-        return `&minus;${Math.abs(temp)}`
+        return `&minus;${Math.abs(temp)}`;
     } else if (temp > 0) {
-        return `&plus;${temp}`
-    } else {
-        return `${temp}`
+        return `&plus;${temp}`;
     }
-
+    return `${temp}`;
 }
-
-
-// Returns txt-variant of date
-function getDateTxt(value, showTodayTxt = false) {
-
-    let d = new Date(value * 1000);
-
-    const MONTHS = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря"
-    ];
-
-    const WDAYS = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
-
-    let now = new Date();
-
-    if (now.getDate() == d.getDate() && showTodayTxt == true) {
-        return `Сегодня`;
-    } else {
-        return `${d.getDate()} ${MONTHS[d.getMonth()]}, ${WDAYS[d.getDay()]}`;
-    }
-
-}
-
-
-// Returns title of the wind from direction-value
-function getWindName(deg) {
-
-    if (deg >= 0 && deg < 22.5) { return "С" }
-    else if (deg >= 22.5 && deg < 45) { return "ССВ" }
-    else if (deg >= 45 && deg < 67.5) { return "СВ" }
-    else if (deg >= 67.5 && deg < 90) { return "ВСВ" }
-    else if (deg >= 90 && deg < 112.5) { return "В" }
-    else if (deg >= 112.5 && deg < 135) { return "ВЮВ" }
-    else if (deg >= 135 && deg < 157.5) { return "ЮВ" }
-    else if (deg >= 157.5 && deg < 180) { return "ЮЮВ" }
-    else if (deg >= 180 && deg < 202.5) { return "Ю" }
-    else if (deg >= 202.5 && deg < 225) { return "ЮЮЗ" }
-    else if (deg >= 225 && deg < 247.5) { return "ЮЗ" }
-    else if (deg >= 247.5 && deg < 270) { return "ЗЮЗ" }
-    else if (deg >= 270 && deg < 292.5) { return "З" }
-    else if (deg >= 292.5 && deg < 315) { return "ЗСЗ" }
-    else if (deg >= 315 && deg < 337.5) { return "СЗ" }
-    else if (deg >= 337.5 && deg <= 360) { return "ССЗ" }
-    else { return "" }
-
-}
-
