@@ -1,0 +1,25 @@
+@import "./../../common/scss/variables";
+@import "./../../common/scss/mixines";
+
+.header {
+    @include wrapper;  
+    height: 56px;
+    margin-top: 8px;
+    font-weight: $font-weight-bold;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include w-from($screen-md) {
+        height: 88px;
+        margin-top: 16px;
+        font-size: 48px;        
+    }
+
+    @include w-from($screen-lg) {
+        height: 160px;
+        margin-top: 16px;
+        font-size: 80px;        
+    }    
+}

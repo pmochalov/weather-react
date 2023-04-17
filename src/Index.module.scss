@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import "./common/scss/normalize";
+@import "./common/scss/variables";
+@import "./common/scss/mixines";
+// @import "./common/scss/fonts";
+// @import "fonts";
+// @import "intro";
+// @import "tabs";
+// @import "card";
+// @import "footer";
+// @import "temp-bg-colors";
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: $font-family;
+    font-weight: $font-weight-base;
+    background-color: $bgcolor;
+    font-size: $font-size-base;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: lighten($font-color, 50%);
+    border-bottom: lighten($font-color, 80%) 1px solid;
+}

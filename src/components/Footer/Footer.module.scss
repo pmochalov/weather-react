@@ -1,0 +1,25 @@
+@import "./../../common/scss/variables";
+@import "./../../common/scss/mixines";
+
+.footer {
+    margin-top: 16px;    
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include w-from($screen-md) {
+        height: 48px;
+        font-size: 16px;
+    }
+
+    @include w-from($screen-lg) {
+        height: 64px;
+        font-size: 16px;
+    }    
+
+    a {
+        color: $font-color;
+        border-bottom: $font-color 1px solid;
+    }
+}

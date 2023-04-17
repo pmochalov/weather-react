@@ -1,0 +1,29 @@
+@mixin w-from($screen) {
+    @media (min-width: $screen) {
+        @content;
+    }
+}
+
+@mixin wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 0px;
+    padding-right: 8px;
+    padding-bottom: 0px;
+    padding-left: 8px;
+
+    @include w-from($screen-lg) {
+        padding-right: 16px;
+        padding-left: 16px;        
+    }
+}
+
+@mixin introBlockProps($height: 80px) {    
+    height: $height;
+    border-radius: 8px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    overflow: hidden; 
+}
