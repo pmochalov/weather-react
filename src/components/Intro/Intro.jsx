@@ -1,35 +1,37 @@
 import React from "react";
 import s from "./Intro.module.scss";
 import "./../../common/scss/_fonts.scss";
+import { getWind, getTimeTxt, getTempTxt } from "../../Kernel";
 
-const Intro = () => {
+const Intro = ({main, weather, wind, sys}) => {
+
     return (
         <>
             <div className={s.intro}>
-                <div id='mainTemp'>+9°C</div>
+                <div id='mainTemp'>{getTempTxt(main?.temp)}°C</div>
                 <div>
                     <div className={s.weatherImg} id='mainWeatherImg'>
-                        <figure className="icon-01d"></figure>
+                        <figure className={`icon-${weather?.icon}`}></figure>
                     </div>
-                    <div className={s.weatherDesc} id='mainWeatherDesc'>ясно</div>
+                    <div className={s.weatherDesc} id='mainWeatherDesc'>{weather?.description}</div>
                 </div>
                 <div>
                     <div className={s.weatherData}>
                         <div
                             className={s.weatherData__pressure}
                             id='mainWeatherPressure'
-                        >770 мм.рт.ст</div>
+                        >{main?.pressure} мм.рт.ст</div>
                         <div
                               className={s.weatherData__wind}
                             id='mainWeatherWind'
-                        >ЗСЗ, 2 м/с</div>
+                        >{getWind(wind?.deg)}, {wind?.speed} м/с</div>
                         <div
                             className={s.weatherData__hydro}
                             id='mainWeatherHydro'
-                        >27 %</div>
+                        >{main?.humidity} %</div>
                         <div className={s.weatherData__sun}>
-                            <span id='mainWeatherSunrise'>Восход: 4:38</span>
-                            <span id='mainWeatherSunset'>Закат: 19:55</span>
+                            <span id='mainWeatherSunrise'>Восход: {getTimeTxt(sys?.sunrise)}</span>
+                            <span id='mainWeatherSunset'>Закат: {getTimeTxt(sys?.sunset)}</span>
                         </div>
                     </div>
                 </div>
