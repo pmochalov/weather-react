@@ -1,13 +1,17 @@
 import React from "react";
 import s from "./Tabs.module.scss";
+import Cards from "./Cards";
 
-const Tabs = ({ mode, handleSetMode }) => {
+const Tabs = ({ mode, handleSetMode, shortData, detailedData }) => {
+    
     return (
         <div className={s.tabs}>
             <TabsMenu mode={mode} handleSetMode={handleSetMode} />
 
             <div id='tabsContent' className={s.tabs__content}>
-                <div className={s.tabs__block}>Какой-то контент</div>
+                <div className={s.tabs__block}>
+                    <Cards mode={mode} shortData={shortData} detailedData={detailedData}/>
+                </div>
             </div>
         </div>
     );

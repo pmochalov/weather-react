@@ -77,21 +77,3 @@
 }
 
 
-.tabs__block {
-    /**/
-}
-
-.tabs__cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;       
-    grid-gap: 8px;
-
-    @include w-from($screen-sm * 2) {  // 640px
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-
-    @include w-from($screen-md) {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-gap: 16px;
-    }
-}

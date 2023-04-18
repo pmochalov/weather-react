@@ -17,27 +17,55 @@ function App() {
   const [sys, setSys] = React.useState({});
   const [dt, setDt] = React.useState(null);
 
+  const [shortData, setShortData] = React.useState([]);
+  const [detailedData, setDetailedData] = React.useState([]);
+
   const handleSetMode = (event) => {
-    const target = event.target;
-    setMode(target.dataset.mode);
+    const mode = event.target.dataset.mode;
+    setMode(mode);
+
+    if(mode === 'short') {
+      getShortData();
+    }
+
+    if(mode === 'detailed') {
+      // getDetailedData();
+    }    
   }
 
+  const getIntroData = async () => {
+    const response = await fetch(getIntroURL());
+    const data = await response.json();
+
+    setMain(data.main);
+    setWeather(data.weather[0]);
+    setWind(data.wind);
+    setSys(data.sys);
+    setDt(data.dt);
+
+    console.log('IntroData: ', data)
+  }
+
+  const getShortData = async () => {
+    const response = await fetch(getShortURL());
+    const data = await response.json();
+    setShortData(data.list)
+    console.log('ShortData: ', data.list)
+  }  
+
+  const getDetailedData = async () => {
+    const response = await fetch(getDetailedURL());
+    const data = await response.json();
+    setDetailedData(data.list)
+    console.log('DetailedData: ', data.list)
+  }    
+
   React.useEffect(() => {
-    const getData = async () => {
-      const response = await fetch(getIntroURL());
-      const data = await response.json();
+    getIntroData();
+    getShortData();
+    // getDetailedData();
 
-      setIsLoading(false);
-
-      setMain(data.main);
-      setWeather(data.weather[0]);
-      setWind(data.wind);
-      setSys(data.sys);
-      setDt(data.dt);
-
-      console.log(data)
-    };
-    getData();
+    setIsLoading(false);
   }, []);
 
 
@@ -49,19 +77,20 @@ function App() {
 
       <Intro main={main} weather={weather} wind={wind} sys={sys} />
 
-      <Tabs mode={mode} handleSetMode={handleSetMode} />
+      <Tabs mode={mode} handleSetMode={handleSetMode} shortData={shortData} detailedData={detailedData} />
 
       <Footer />
     </>
   );
 }
 
+
 const getIntroURL = () => {
   return `${process.env.REACT_APP_API_URL}?intro`;
 }
 
 const getShortURL = () => {
-  return `${process.env.REACT_APP_API_URL}?short`;
+  return `${process.env.REACT_APP_API_URL}?daily`;
 }
 
 const getDetailedURL = () => {
