@@ -8,6 +8,8 @@ import Tabs from './components/Tabs/Tabs';
 
 function App() {
 
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const [mode, setMode] = React.useState('short') // short - краткий, detailed - подробный
   const [main, setMain] = React.useState({});
   const [weather, setWeather] = React.useState([]);
@@ -17,25 +19,29 @@ function App() {
 
   const handleSetMode = (event) => {
     const target = event.target;
-    setMode(target.dataset.mode)
+    setMode(target.dataset.mode);
   }
 
   React.useEffect(() => {
     const getData = async () => {
       const response = await fetch(getIntroURL());
       const data = await response.json();
+
+      setIsLoading(false);
+
       setMain(data.main);
       setWeather(data.weather[0]);
       setWind(data.wind);
       setSys(data.sys);
       setDt(data.dt);
+
       console.log(data)
     };
     getData();
   }, []);
 
 
-  return (
+  return (isLoading ||
     <>
       <Header />
 

@@ -1,7 +1,7 @@
 import React from "react";
 import s from "./Intro.module.scss";
 import "./../../common/scss/_fonts.scss";
-import { getWind, getTimeTxt, getTempTxt } from "../../Kernel";
+import { getWind, getTimeTxt, getTempTxt, getPressure } from "../../lib/Kernel";
 
 const Intro = ({main, weather, wind, sys}) => {
 
@@ -20,7 +20,7 @@ const Intro = ({main, weather, wind, sys}) => {
                         <div
                             className={s.weatherData__pressure}
                             id='mainWeatherPressure'
-                        >{main?.pressure} мм.рт.ст</div>
+                        >{getPressure(main?.pressure)} мм.рт.ст</div>
                         <div
                               className={s.weatherData__wind}
                             id='mainWeatherWind'

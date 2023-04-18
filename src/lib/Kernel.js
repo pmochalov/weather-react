@@ -12,30 +12,39 @@ export const getWind = (deg) => {
     return wind.value;
 }
 
+
 export const getDateTxt = (value, showTodayTxt = false) => {
     if (!value) return;
 
     const date = new Date(value * 1000);
     const now = new Date();
 
-    if (now.getDate() == date.getDate() && showTodayTxt == true) {
+    if (now.getDate() === date.getDate() && showTodayTxt === true) {
         return `Сегодня`;
     }
 
     return `${date.getDate()} ${monthsArr[date.getMonth()]}, ${daysArr[date.getDay()]}`;
 }
 
+
 export const getTempTxt = (value) => {
     if (!value) return;
 
-    const temp = Math.round(value);
+    const temperature = Math.round(value);
 
-    if (temp < 0) {
-        return `- ${Math.abs(temp)}`;
-    } else if (temp > 0) {
-        return `+ ${temp}`;
+    if (temperature < 0) {
+        return `- ${Math.abs(temperature)}`;
+    } else if (temperature > 0) {
+        return `+ ${temperature}`;
     }
-    return `${temp}`;
+    return `${temperature}`;
+}
+
+
+export const getPressure = (value) => {
+    if (!value) return;
+    
+    return Math.round(+value * 0.75);
 }
 
 
@@ -49,11 +58,12 @@ export const getTimeTxt = (value) => {
     return `${hours}:${minutes}`;
 }
 
+
 const daysArr = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
 
 const monthsArr = ["января", "февраля", "марта", "апреля",
     "мая", "июня", "июля", "августа",
-    "сентября", "октября", "ноября", "декабря"]
+    "сентября", "октября", "ноября", "декабря"];
 
 const windsArr = [
     {
