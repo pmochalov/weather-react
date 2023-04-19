@@ -26,14 +26,6 @@ function App() {
   const handleSetMode = (event) => {
     const mode = event.target.dataset.mode;
     setMode(mode);
-
-    if(mode === 'short') {
-      getShortData();
-    }
-
-    if(mode === 'detailed') {
-      // getDetailedData();
-    }    
   }
 
   const getIntroData = async () => {
@@ -54,36 +46,36 @@ function App() {
     const data = await response.json();
     setShortData(data.list)
     console.log('ShortData: ', data.list)
-  }  
+  }
 
   const getDetailedData = async () => {
     const response = await fetch(getDetailedURL());
     const data = await response.json();
-    setDetailedData(data.list)
-    console.log('DetailedData: ', data.list)
-  }    
+    setDetailedData(editedDetailedData(data.list));
+  }
 
   React.useEffect(() => {
     getIntroData();
     getShortData();
-    // getDetailedData();
+    getDetailedData();
 
     setIsLoading(false);
   }, []);
 
 
   return (isLoading ||
-    <WeatherContext.Provider value={{main, weather, wind, sys, dt}}>
+    <WeatherContext.Provider value={{ main, weather, wind, sys, dt }}>
+
       <Header />
-
       <MainDate />
-
       <Intro />
-      <TabsContext.Provider value={{mode, handleSetMode, shortData, detailedData}}>
+
+      <TabsContext.Provider value={{ mode, handleSetMode, shortData, detailedData }}>
         <Tabs />
       </TabsContext.Provider>
 
       <Footer />
+
     </WeatherContext.Provider>
   );
 }
@@ -99,6 +91,26 @@ const getShortURL = () => {
 
 const getDetailedURL = () => {
   return `${process.env.REACT_APP_API_URL}?detailed`;
+}
+
+// Формирует массив погоды по дням
+const editedDetailedData = (data) => {
+  let items = new Map();
+
+  for (let item of data) {
+    const itemDate = new Date(item.dt * 1000);
+    const keyDate = +new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate()) / 1000;
+
+    if (!items.has(keyDate)) {
+      items.set(keyDate, [])
+    }
+
+    let arr = items.get(keyDate);
+    arr.push(item);
+    items.set(keyDate, arr);
+  }
+
+  return Array.from(items);
 }
 
 export default App;

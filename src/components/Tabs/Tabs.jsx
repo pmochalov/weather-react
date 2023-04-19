@@ -4,17 +4,16 @@ import Cards from "./Cards";
 import { TabsContext } from "../../App";
 
 const Tabs = () => {
-    
-    const { mode, handleSetMode, shortData, detailedData } = React.useContext(TabsContext);
+    const { mode, handleSetMode } = React.useContext(TabsContext);
 
     return (
         <div className={s.tabs}>
             <TabsMenu mode={mode} handleSetMode={handleSetMode} />
 
-            <div id='tabsContent' className={s.tabs__content}>
-                <div className={s.tabs__block}>
-                    <Cards mode={mode} shortData={shortData} detailedData={detailedData}/>
-                </div>
+            <div className={s.tabs__content}>
+                
+                    <Cards />
+                
             </div>
         </div>
     );

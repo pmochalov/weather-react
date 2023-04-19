@@ -1,6 +1,6 @@
 
 export const getWind = (deg) => {
-    if (!deg) return;
+    if (deg === undefined) return;
 
     const wind = windsArr.find((w) => {
         if (w.end == 360) {
