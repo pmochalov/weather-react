@@ -2,8 +2,11 @@ import React from "react";
 import s from "./Intro.module.scss";
 import "./../../common/scss/_fonts.scss";
 import { getWind, getTimeTxt, getTempTxt, getPressure } from "../../lib/Kernel";
+import { WeatherContext } from "../../App";
 
-const Intro = ({main, weather, wind, sys}) => {
+const Intro = () => {
+
+    const {main, weather, wind, sys} = React.useContext(WeatherContext);
 
     return (
         <>

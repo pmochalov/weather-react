@@ -6,6 +6,9 @@ import MainDate from './components/MainDate/MainDate';
 import Intro from './components/Intro/Intro';
 import Tabs from './components/Tabs/Tabs';
 
+export const WeatherContext = React.createContext();
+export const TabsContext = React.createContext();
+
 function App() {
 
   const [isLoading, setIsLoading] = React.useState(true);
@@ -70,17 +73,18 @@ function App() {
 
 
   return (isLoading ||
-    <>
+    <WeatherContext.Provider value={{main, weather, wind, sys, dt}}>
       <Header />
 
-      <MainDate dt={dt} />
+      <MainDate />
 
-      <Intro main={main} weather={weather} wind={wind} sys={sys} />
-
-      <Tabs mode={mode} handleSetMode={handleSetMode} shortData={shortData} detailedData={detailedData} />
+      <Intro />
+      <TabsContext.Provider value={{mode, handleSetMode, shortData, detailedData}}>
+        <Tabs />
+      </TabsContext.Provider>
 
       <Footer />
-    </>
+    </WeatherContext.Provider>
   );
 }
 
