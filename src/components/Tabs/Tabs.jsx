@@ -8,12 +8,11 @@ const Tabs = () => {
 
     return (
         <div className={s.tabs}>
+            
             <TabsMenu mode={mode} handleSetMode={handleSetMode} />
 
             <div className={s.tabs__content}>
-                
-                    <Cards />
-                
+                <Cards />
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ export const getWind = (deg) => {
     if (deg === undefined) return;
 
     const wind = windsArr.find((w) => {
-        if (w.end == 360) {
+        if (w.end === 360) {
             return (deg >= w.start && deg <= w.end);
         }
         return (deg >= w.start && deg < w.end);

@@ -37,15 +37,14 @@ function App() {
     setWind(data.wind);
     setSys(data.sys);
     setDt(data.dt);
-
-    console.log('IntroData: ', data)
+    // console.log('IntroData: ', data)
   }
 
   const getShortData = async () => {
     const response = await fetch(getShortURL());
     const data = await response.json();
     setShortData(data.list)
-    console.log('ShortData: ', data.list)
+    // console.log('ShortData: ', data.list)
   }
 
   const getDetailedData = async () => {
