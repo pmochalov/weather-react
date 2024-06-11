@@ -1,2 +1,2 @@
-# Weather reactp app
+# Weather react app
 
